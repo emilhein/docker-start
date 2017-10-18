@@ -1,0 +1,27 @@
+{
+  "name": "devops-path-lookup",
+  "version": "1.0.0",
+  "description": "a small project for lookup up path urls from a spreadsheet",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "ehei",
+  "license": "ISC",
+  "dependencies": {
+    "node-xlsx": "0.11.0",
+    "promise-parallel-throttle": "3.0.0",
+    "request": "2.83.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^7.1.0",
+    "eslint-plugin-jasmine": "^2.2.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
