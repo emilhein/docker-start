@@ -10,5 +10,7 @@ docker run -it --rm --name {CONTAINER_NAME} {IMAGE_NAME}
 
 //To run with mounted volume
 docker run -v c:\projects\run-through-speadsheet:/usr/app {IMAGE_NAME}
+
+docker-compose up
 ```
 
