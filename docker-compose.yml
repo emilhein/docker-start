@@ -1,0 +1,9 @@
+version: '2'
+services:
+  web:
+    build: .
+    # volumes:
+    # - .:/usr/app
+    container_name: my-web-container
+
+
