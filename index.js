@@ -4,6 +4,9 @@ const xlsx = require('node-xlsx');
 const request = require('request');
 const promiseParallelThrottle = require('promise-parallel-throttle');
 const fs = require('fs');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 80;
 
 const getAllUrlsFromSheet = (name, row) => {
     return new Promise((resolve, reject) => {
@@ -56,10 +59,20 @@ const writeResult = allResults => {
     });
 };
 
-getAllUrlsFromSheet('applications.xlsx', 0)
-.then(runAllPromises)
-.then(writeResult)
-.then(console.log)
-.catch(eer => {
-    console.log('Los err ', eer);
+app.get('/', (req, res) => {
+    res.status(400).send(`I found this - or this - or this`);
+});
+
+app.get('/runspread', (req, res) => {
+    getAllUrlsFromSheet('applications.xlsx', 0)
+    .then(runAllPromises)
+    .then(writeResult)
+    .then(console.log)
+    .catch(eer => {
+        console.log('Los erroooor ', eer);
+    });
+    // res.status(400).send(`I found this`);
+});
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}!`);
 });
