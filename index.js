@@ -25,6 +25,7 @@ app.listen(port, () => {
 });
 
 app.get('/testDb', (req, res) => {
+    // should be from env variable
     let host = 'mbdbinstance.ca0c2jquskpr.eu-west-1.rds.amazonaws.com';
     let username = 'Master';
     let pass = 'Master123';
