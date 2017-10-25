@@ -1,91 +1,36 @@
 'use strict';
 
-const xlsx = require('node-xlsx');
-const request = require('request');
-const promiseParallelThrottle = require('promise-parallel-throttle');
-const fs = require('fs');
+const spreadsheet = require('./src/spreadsheet');
+const postgres = require('./src/sequelize');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
 
-const getAllUrlsFromSheet = (name, row) => {
-    return new Promise((resolve, reject) => {
-        const workSheetsFromFile = xlsx.parse(`${__dirname}/spreadsheets/${name}`);
-        let data = workSheetsFromFile[0].data;
-        let urlAr = [];
-        data.map(entry => {
-            urlAr.push(`https://dr.dk${entry[row]}`);
-        });
-        return resolve(urlAr);
-    });
-};
-
-const getStatus = url => {
-    console.log(`Getting status from ${url}`);
-    return new Promise((resolve, reject) => {
-        request(url, (error, response, body) => {
-            if (error) return reject(error);
-            // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            let res = {
-                url: url,
-                status: response.statusCode
-            };
-            return resolve(res);
-        });
-    });
-};
-
-async function runAllPromises (arr) {
-    const queue = arr.map(entry => () => getStatus(entry));
-    // Create a (optional) Options object
-    const options = {
-        maxInProgress: 40,
-        failFast: false
-        // progressCallback: statusUpdate => console.log(statusUpdate)
-    };
-    // //Execute the throttle task, only the array of tasks is required, other params are optional.
-    const slowly = await promiseParallelThrottle.all(queue, options);
-    return slowly;
-}
-
-const writeResult = allResults => {
-    return new Promise((resolve, reject) => {
-        const data = allResults.map(oneSite => [oneSite.url, oneSite.status]);
-        let buffer = xlsx.build([{name: 'mySheetName', data: data}]); // Returns a buffer
-        fs.writeFile(`${__dirname}/results/result.xlsx`, buffer, (err) => {
-            if (err) return reject(err);
-            return resolve('The file was saved!');
-        });
-    });
-};
-
 app.get('/', (req, res) => {
-    res.status(400).send(`I found this - or this - or this`);
+    res.status(200).send(`I found this - or this - or this`);
 });
 
 app.get('/runspread', (req, res) => {
-    getAllUrlsFromSheet('applications.xlsx', 0)
-    .then(runAllPromises)
-    .then(writeResult)
+    spreadsheet.getAllUrlsFromSheet('applications.xlsx', 0)
+    .then(spreadsheet.runAllPromises)
+    .then(spreadsheet.writeResult)
     .then(console.log)
     .catch(eer => {
-        console.log('Los erroooor ', eer);
+        res.status(400).send(eer);
     });
-    // res.status(400).send(`I found this`);
 });
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });
 
-const Sequelize = require('sequelize');
-
-// Or you can simply use a connection uri
-const sequelize = new Sequelize('postgres://someUser@postgres/myDB');
-sequelize
-.authenticate()
-.then(() => {
-    console.log('Connection has been established successfully.');
-})
-.catch(err => {
-    console.error('Unable to connect to the database:', err);
+app.get('/testDb', (req, res) => {
+    let host = 'mbdbinstance.ca0c2jquskpr.eu-west-1.rds.amazonaws.com';
+    let username = 'Master';
+    let pass = 'Master123';
+    let db = 'someName';
+    let dialect = 'postgres';
+    postgres.checkConnection(host, db, dialect, username, pass)
+    .then(succes => res.status(200).send(succes))
+    .catch(error => res.status(400).send(error));
 });
