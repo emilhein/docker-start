@@ -33,13 +33,10 @@ app.get('/testdb', (req, res) => {
     // should be from env variable
     let host = process.env.PGHOST;
     let db = process.env.PGDATABASE;
-    // console.log(`${process.env.PGHOST}`);
-
     let username = process.env.PGUSER;
     let pass = process.env.PGPASS;
-
     let dialect = 'postgres';
-    console.log('___', host, db, dialect, username, pass);
+
     postgres.checkConnection(host, db, dialect, username, pass)
     .then(succes => res.status(200).send(succes))
     .catch(error => res.status(400).send(error));
