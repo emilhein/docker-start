@@ -9,6 +9,8 @@ exports.checkConnection = (host, db, dialect, username, pass) => {
     });
 
     return new Promise((resolve, reject) => {
+        console.log('hi');
+
         sequelize
             .authenticate()
             .then(() => {

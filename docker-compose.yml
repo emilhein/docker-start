@@ -7,13 +7,22 @@ services:
     container_name: my-web-container
     ports:
       - "80:80"
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     DATABASE_URL: postgres://todoapp@postgres/todos
-  postgres:
+    # depends_on:
+    #   - db
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/db
+    links:
+    - db
+    environment:
+    - PGHOST=db
+    - PGDATABASE=db
+    - PGUSER=user
+    - PGPASS=password
+  
+  # https://hub.docker.com/r/_/postgres/
+  db:
     image: postgres:9.6.2-alpine
     environment:
-      POSTGRES_USER: someUser
-      POSTGRES_DB: myDB
-
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: db

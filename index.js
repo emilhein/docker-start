@@ -1,16 +1,16 @@
 'use strict';
 
-const spreadsheet = require('./src/spreadsheet');
-const postgres = require('./src/sequelize');
+const index = require('./src/index');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
 
 app.get('/', (req, res) => {
-    res.status(200).send(`I found this - or this - or this`);
+    res.status(200).send(`Welcome my friend`);
 });
 
 app.get('/runspread', (req, res) => {
+    const spreadsheet = index.spreadsheet;
     spreadsheet.getAllUrlsFromSheet('applications.xlsx', 0)
     .then(spreadsheet.runAllPromises)
     .then(spreadsheet.writeResult)
@@ -20,17 +20,26 @@ app.get('/runspread', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}!`);
+app.post('/buildimage', (req, res) => {
+    res.status(200).send(`More will come`);
 });
 
-app.get('/testDb', (req, res) => {
+app.listen(port, () => {
+    console.log(`App listening on port ${port}!`);
+});
+
+app.get('/testdb', (req, res) => {
+    const postgres = index.postgres;
     // should be from env variable
-    let host = 'mbdbinstance.ca0c2jquskpr.eu-west-1.rds.amazonaws.com';
-    let username = 'Master';
-    let pass = 'Master123';
-    let db = 'someName';
+    let host = process.env.PGHOST;
+    let db = process.env.PGDATABASE;
+    // console.log(`${process.env.PGHOST}`);
+
+    let username = process.env.PGUSER;
+    let pass = process.env.PGPASS;
+
     let dialect = 'postgres';
+    console.log('___', host, db, dialect, username, pass);
     postgres.checkConnection(host, db, dialect, username, pass)
     .then(succes => res.status(200).send(succes))
     .catch(error => res.status(400).send(error));

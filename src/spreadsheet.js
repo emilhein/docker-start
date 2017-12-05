@@ -5,7 +5,7 @@ const request = require('request');
 const promiseParallelThrottle = require('promise-parallel-throttle');
 const fs = require('fs');
 
-exports.getAllUrlsFromSheet = (name, row) => {
+exports.getAllUrlsFromSheet = (name, row, prefix = '') => {
     let workSheetsFromFile;
     return new Promise((resolve, reject) => {
         try {
@@ -16,7 +16,7 @@ exports.getAllUrlsFromSheet = (name, row) => {
         let data = workSheetsFromFile[0].data;
         let urlAr = [];
         data.map(entry => {
-            urlAr.push(`https://dr.dk${entry[row]}`);
+            urlAr.push(`${prefix}${entry[row]}`);
         });
         return resolve(urlAr);
     });
