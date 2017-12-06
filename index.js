@@ -24,9 +24,7 @@ app.post('/buildimage', (req, res) => {
     res.status(200).send(`More will come`);
 });
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port}!`);
-});
+app.listen(port, () => console.log(`App listening on port ${port}!`));
 
 app.get('/testdb', (req, res) => {
     const postgres = index.postgres;
