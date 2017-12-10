@@ -1,7 +1,7 @@
 'use strict';
 const Sequelize = require('sequelize');
 
-const index = require('./src/index');
+const routes = require('./src/routes');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/runspread', (req, res) => {
-    const spreadsheet = index.spreadsheet;
+    const spreadsheet = routes.spreadsheet;
     spreadsheet.getAllUrlsFromSheet('applications.xlsx', 0)
     .then(spreadsheet.runAllPromises)
     .then(spreadsheet.writeResult)
@@ -21,14 +21,10 @@ app.get('/runspread', (req, res) => {
     });
 });
 
-app.post('/buildimage', (req, res) => {
-    res.status(200).send(`More will come`);
-});
-
 app.listen(port, () => console.log(`App listening on port ${port}!`));
 
 app.get('/testdb', (req, res) => {
-    const postgres = index.postgres;
+    const postgres = routes.postgres;
     // should be from env variable
     let host = process.env.PGHOST;
     let db = process.env.PGDATABASE;
@@ -43,3 +39,5 @@ app.get('/testdb', (req, res) => {
     .then(succes => res.status(200).send(succes))
     .catch(error => res.status(400).send(error));
 });
+
+module.exports = app;
