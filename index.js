@@ -1,4 +1,5 @@
 'use strict';
+const Sequelize = require('sequelize');
 
 const index = require('./src/index');
 const express = require('express');
@@ -34,8 +35,11 @@ app.get('/testdb', (req, res) => {
     let username = process.env.PGUSER;
     let pass = process.env.PGPASS;
     let dialect = 'postgres';
-
-    postgres.checkConnection(host, db, dialect, username, pass)
+    const connection = new Sequelize(db, username, pass, {
+        host: host,
+        dialect: dialect
+    });
+    postgres.checkConnection(connection)
     .then(succes => res.status(200).send(succes))
     .catch(error => res.status(400).send(error));
 });
