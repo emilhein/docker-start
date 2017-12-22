@@ -4,9 +4,8 @@
   "description": "Some docker test. Will expand as we go",
   "main": "index.js",
   "scripts": {
-    "test": "docker-compose -f docker-compose.test.yml up",
-    "posttest": "docker-compose stop db",
-    "runtest" : "mocha",
+    "test": "mocha",
+    "build" : "docker-compose up",
     "start": "node_modules/.bin/nodemon index.js"
   },
   "keywords": [

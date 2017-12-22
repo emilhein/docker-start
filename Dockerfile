@@ -11,4 +11,3 @@ RUN npm install --quiet
 
 COPY . .
 
-CMD ["nodemon", "-L", "/usr/app"]

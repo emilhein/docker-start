@@ -12,3 +12,4 @@ will spin up tow contains.
 1. The node app running with nodemon
 2. A postgres db
 
+    "posttest": "mocha",//"docker-compose stop db",
