@@ -1,13 +1,18 @@
 'use strict';
 const Sequelize = require('sequelize');
 
-const routes = require('./src/routes');
+const routes = require('./src/index');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
 
 app.get('/', (req, res) => {
     res.status(200).send(`Welcome my friend`);
+});
+
+app.get('/validate', (req, res) => {
+    // this should be to validate Joi models
+    res.status(200).send(`Validate soon`);
 });
 
 app.get('/runspread', (req, res) => {
