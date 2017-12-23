@@ -5,6 +5,7 @@ const routes = require('./src/index');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 80;
+app.listen(port, () => console.log(`App listening on port ${port}!`));
 
 app.get('/', (req, res) => {
     res.status(200).send(`Welcome my friend`);
@@ -12,9 +13,12 @@ app.get('/', (req, res) => {
 
 app.get('/validate', (req, res) => {
     // this should be to validate Joi models
-    res.status(200).send(`Validate soon`);
+    routes.validate(req)
+    .then(res => res.status(200).send(res))
+    .catch(err => res.status(400).send(err));
 });
 
+// TODO: refactor to new style see above
 app.get('/runspread', (req, res) => {
     const spreadsheet = routes.spreadsheet;
     spreadsheet.getAllUrlsFromSheet('applications.xlsx', 0)
@@ -26,8 +30,7 @@ app.get('/runspread', (req, res) => {
     });
 });
 
-app.listen(port, () => console.log(`App listening on port ${port}!`));
-
+// TODO: refactor to new style see above
 app.get('/testdb', (req, res) => {
     const postgres = routes.postgres;
     // should be from env variable
