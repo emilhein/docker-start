@@ -13,7 +13,15 @@ app.get('/', (req, res) => {
 
 app.get('/validate', (req, res) => {
     // this should be to validate Joi models
-    routes.validate(req)
+
+    const data = {
+        email: 'not_a_valid_email_to_show_custom_label',
+        password: 'abcd1234',
+        password_confirmation: 'abc1',
+        first_name: 'Joe',
+        last_name: 'Doe'
+    };
+    routes.validate(data)
     .then(res => res.status(200).send(res))
     .catch(err => res.status(400).send(err));
 });

@@ -12,6 +12,4 @@ const checkConnection = (connection) => {
     });
 };
 
-module.exports = {
-    checkConnection
-};
+module.exports = checkConnection;
